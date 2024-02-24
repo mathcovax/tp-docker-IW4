@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List of Users{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4 text-4xl font-semibold">List of Users</h1>
+    <ul class="pl-4 list-decimal">
+        {% for user in users %}
+            <li class="">
+                <span>{{ user.firstname }}</span> 
+                <span class="uppercase">{{ user.lastname }}</span> 
+                <span>(<a href="mailto:{{ user.email }}" target="_blank" class="underline text-sky-600">{{ user.email }}</a>)</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
