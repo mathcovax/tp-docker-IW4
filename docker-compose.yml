@@ -1,0 +1,60 @@
+version: "3.7"
+services:
+  php:
+    restart: always
+    tty: true
+    image: mathcovax/php8
+    working_dir: /var/www/
+    volumes:
+      - ./symfony:/var/www
+
+  composer:
+    image: mathcovax/composer
+    volumes:
+      - ./symfony:/app
+    depends_on:
+      - php
+
+  nginx:
+    restart: always
+    image: mathcovax/nginx
+    volumes:
+      - ./symfony:/var/www
+    ports:
+      - "8888:80"
+    depends_on:
+      - php
+
+  node_installer:
+    image: mathcovax/node
+    volumes:
+      - ./symfony:/app
+    command: npm install
+    depends_on:
+      - php
+  
+  node_webpack:
+    image: mathcovax/node
+    working_dir: /app
+    volumes:
+      - ./symfony:/app 
+    command: npm run watch
+    depends_on:
+      node_installer:
+        condition: service_completed_successfully
+
+  adminer:
+    image: mathcovax/adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+  postgresql:
+    image: mathcovax/postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: symfony 
+      POSTGRES_PASSWORD: symfony
+      POSTGRES_DB: symfony
+    ports:
+      - "5432:5432"
