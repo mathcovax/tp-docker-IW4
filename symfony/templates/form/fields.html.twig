@@ -1,0 +1,37 @@
+{% use 'tailwind_2_layout.html.twig' %}
+
+{%- block form_row -%}
+	<div class="max-w-xs flex flex-col gap-2">
+		{{ form_label(form) }}
+		{{ form_widget(form) }}
+		<div class="text-sm text-red-600">
+			{{ form_errors(form) }}
+		</div>
+	</div>
+{%- endblock form_row -%}
+
+{%- block checkbox_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_errors(form) -}}
+        <div class="inline-flex items-center gap-1 dark:text-dark-white">
+            {{- form_widget(form, widget_attr) -}}
+            {{- form_label(form) -}}
+        </div>
+        {{- form_help(form) -}}
+    </div>
+{%- endblock checkbox_row -%}
+
+{%- block widget_attributes -%}
+	{%- set attr = attr|merge({ class: attr.class|default(widget_class|default('w-60 sm:w-80 p-2 rounded-lg outline-none border-2 transition-all duration-300')) }) -%}
+	{{- parent() -}}
+{%- endblock widget_attributes -%}
+
+{%- block submit_widget -%}
+    {%- set type = type|default('submit') -%}
+	{%- set attr = attr|merge({ class: (attr.class|default('') ~ 'mt-5 bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded')|trim}) -%}
+	{{- parent() -}}
+{%- endblock submit_widget -%}

@@ -3,14 +3,32 @@
 {% block title %}List of Users{% endblock %}
 
 {% block body %}
-    <h1 class="mb-4 text-4xl font-semibold">List of Users</h1>
-    <ul class="pl-4 list-decimal">
+    <div class="mb-10 flex justify-between items-center">
+        <h1 class="text-4xl font-semibold">List of Users</h1>
+        <div>
+            {% if app.user %}
+                <span class="text-sky-600 font-bold">{{ app.user.email }}</span>
+                <a href="{{ path('app_logout') }}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Logout</a>
+            {% else %}
+                <a href="{{ path('app_register') }}" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded">Register</a>
+                <a href="{{ path('app_login') }}" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <table class="border border-black">
+    <thead>
+        <tr>
+            <th class="border border-black">ID</th>
+            <th class="border border-black">Email</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for user in users %}
-            <li class="">
-                <span>{{ user.firstname }}</span> 
-                <span class="uppercase">{{ user.lastname }}</span> 
-                <span>(<a href="mailto:{{ user.email }}" target="_blank" class="underline text-sky-600">{{ user.email }}</a>)</span>
-            </li>
+            <tr>
+                <td class="border border-black">{{ user.id }}</td>
+                <td class="border border-black"><a href="mailto:{{ user.email }}" target="_blank" class="underline text-sky-600">{{ user.email }}</a></td>
+            </tr>
         {% endfor %}
-    </ul>
+    </tbody>
+</table>
 {% endblock %}
